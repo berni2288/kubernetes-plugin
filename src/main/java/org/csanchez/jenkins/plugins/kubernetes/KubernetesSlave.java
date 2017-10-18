@@ -163,22 +163,15 @@ public class KubernetesSlave extends AbstractCloudSlave {
             computer.disconnect(OfflineCause.create(new Localizable(HOLDER, "offline")));
             return;
         }
-        KubernetesCloud cloud;
-        try {
-            cloud = getKubernetesCloud();
-        } catch (IllegalStateException e) {
-            e.printStackTrace(listener.fatalError("Unable to terminate slave. Cloud may have been removed. There may be leftover resources on the Kubernetes cluster."));
-            LOGGER.log(Level.SEVERE, String.format("Unable to terminate slave %s. Cloud may have been removed. There may be leftover resources on the Kubernetes cluster.", name));
-            computer.disconnect(OfflineCause.create(new Localizable(HOLDER, "offline")));
-            return;
-        }
+
+        KubernetesCloud cloud = getKubernetesCloud();
         KubernetesClient client;
         try {
             client = cloud.connect();
         } catch (UnrecoverableKeyException | CertificateEncodingException | NoSuchAlgorithmException
                 | KeyStoreException e) {
             String msg = String.format("Failed to connect to cloud %s", getCloudName());
-            e.printStackTrace(listener.fatalError(msg));
+            listener.fatalError(msg);
             computer.disconnect(OfflineCause.create(new Localizable(HOLDER, "offline")));
             return;
         }
