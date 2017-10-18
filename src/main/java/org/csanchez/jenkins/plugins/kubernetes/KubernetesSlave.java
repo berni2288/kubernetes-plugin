@@ -54,7 +54,6 @@ public class KubernetesSlave extends AbstractCloudSlave {
         return template;
     }
 
-    @Deprecated
     public KubernetesSlave(PodTemplate template, String nodeDescription, KubernetesCloud cloud, String labelStr)
             throws Descriptor.FormException, IOException {
 
