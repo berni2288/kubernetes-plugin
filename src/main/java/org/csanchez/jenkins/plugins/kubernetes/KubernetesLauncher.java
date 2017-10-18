@@ -96,7 +96,7 @@ public class KubernetesLauncher extends JNLPLauncher {
         if (slave == null) {
             throw new IllegalStateException("Node has been removed, cannot launch " + computer.getName());
         }
-        KubernetesCloud cloud = slave.getKubernetesCloud();
+        KubernetesCloud cloud = slave.getCloud();
         final PodTemplate unwrappedTemplate = slave.getTemplate();
         try {
             KubernetesClient client = cloud.connect();
@@ -254,7 +254,7 @@ public class KubernetesLauncher extends JNLPLauncher {
         PodFluent.SpecNested<PodBuilder> builder = new PodBuilder()
                 .withNewMetadata()
                 .withName(substituteEnv(slave.getNodeName()))
-                .withLabels(slave.getKubernetesCloud().getLabelsMap(template.getLabelSet()))
+                .withLabels(slave.getCloud().getLabelsMap(template.getLabelSet()))
                 .withAnnotations(getAnnotationsMap(template.getAnnotations()))
                 .endMetadata()
                 .withNewSpec();
@@ -285,7 +285,7 @@ public class KubernetesLauncher extends JNLPLauncher {
         env.put("JENKINS_SECRET", slave.getComputer().getJnlpMac());
         env.put("JENKINS_NAME", slave.getComputer().getName());
 
-        KubernetesCloud cloud = slave.getKubernetesCloud();
+        KubernetesCloud cloud = slave.getCloud();
 
         String url = cloud.getJenkinsUrlOrDie();
 
